@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  * USA.
  *
-******************************************************************************/
+ ******************************************************************************/
 
 /*
 ------------------------------------------------------------------------------
@@ -49,13 +49,13 @@ typedef unsigned char ub1;
 #define MSK53 0x001FFFFFFFFFFFFFLL
 
 struct isaac64_state {
-  unsigned int randcnt;
-  ub8 aa;
-  ub8 bb;
-  ub8 cc;
-  ub8 randrsl[RANDSIZ];
-  ub8 mm[RANDSIZ];
-  ub8 rngblocks;
+    unsigned int randcnt;
+    ub8 aa;
+    ub8 bb;
+    ub8 cc;
+    ub8 randrsl[RANDSIZ];
+    ub8 mm[RANDSIZ];
+    ub8 rngblocks;
 };
 
 void isaac64_init(struct isaac64_state *rng, ub4 seed);
@@ -68,36 +68,30 @@ Macros to get individual random numbers
 ------------------------------------------------------------------------------
 */
 
-#define isaac64_uint32(rng)                                                    \
-  (rng->randcnt > 0 ? (*(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 1)))       \
-                    : (isaac64_generate(rng), rng->randcnt = RANDMAX - 1,      \
-                       *(((ub4 *)(rng->randrsl)) + rng->randcnt)))
+#define isaac64_uint32(rng)                                                                        \
+    (rng->randcnt > 0 ? (*(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 1)))                         \
+                      : (isaac64_generate(rng), rng->randcnt = RANDMAX - 1,                        \
+                         *(((ub4 *)(rng->randrsl)) + rng->randcnt)))
 
-#define isaac64_uint64(rng)                                                    \
-  (rng->randcnt > 1                                                            \
-       ? (*((ub8 *)(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 2))))           \
-       : (isaac64_generate(rng), rng->randcnt = RANDMAX - 2,                   \
-          *((ub8 *)(((ub4 *)(rng->randrsl)) + rng->randcnt))))
+#define isaac64_uint64(rng)                                                                        \
+    (rng->randcnt > 1 ? (*((ub8 *)(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 2))))                \
+                      : (isaac64_generate(rng), rng->randcnt = RANDMAX - 2,                        \
+                         *((ub8 *)(((ub4 *)(rng->randrsl)) + rng->randcnt))))
 
-#define isaac64_dbl32(rng)                                                     \
-  (rng->randcnt > 0                                                            \
-       ? (DBL32 *(*(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 1))))           \
-       : (isaac64_generate(rng), rng->randcnt = RANDMAX - 1,                   \
-          DBL32 * (*(((ub4 *)(rng->randrsl)) + rng->randcnt))))
+#define isaac64_dbl32(rng)                                                                         \
+    (rng->randcnt > 0 ? (DBL32 * (*(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 1))))               \
+                      : (isaac64_generate(rng), rng->randcnt = RANDMAX - 1,                        \
+                         DBL32 * (*(((ub4 *)(rng->randrsl)) + rng->randcnt))))
 
-#define isaac64_dbl53(rng)                                                     \
-  (rng->randcnt > 1                                                            \
-       ? (DBL53 *(                                                             \
-             (*((ub8 *)(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 2)))) >>    \
-             11))                                                              \
-       : (isaac64_generate(rng), rng->randcnt = RANDMAX - 2,                   \
-          DBL53 *                                                              \
-              ((*((ub8 *)(((ub4 *)(rng->randrsl)) + rng->randcnt))) >> 11)))
+#define isaac64_dbl53(rng)                                                                         \
+    (rng->randcnt > 1                                                                              \
+         ? (DBL53 * ((*((ub8 *)(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 2)))) >> 11))           \
+         : (isaac64_generate(rng), rng->randcnt = RANDMAX - 2,                                     \
+            DBL53 * ((*((ub8 *)(((ub4 *)(rng->randrsl)) + rng->randcnt))) >> 11)))
 
-#define isaac64_dbl64(rng)                                                     \
-  (rng->randcnt > 1                                                            \
-       ? (DBL64 *(*((ub8 *)(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 2)))))  \
-       : (isaac64_generate(rng), rng->randcnt = RANDMAX - 2,                   \
-          DBL64 * (*((ub8 *)(((ub4 *)(rng->randrsl)) + rng->randcnt)))))
+#define isaac64_dbl64(rng)                                                                         \
+    (rng->randcnt > 1 ? (DBL64 * (*((ub8 *)(((ub4 *)(rng->randrsl)) + (rng->randcnt -= 2)))))      \
+                      : (isaac64_generate(rng), rng->randcnt = RANDMAX - 2,                        \
+                         DBL64 * (*((ub8 *)(((ub4 *)(rng->randrsl)) + rng->randcnt)))))
 
 #endif /* ISAAC64_H */

@@ -39,7 +39,6 @@ output_file_code = 002
 synapse_delay = 3e-4
 start_record_time = 0
 stop_record_time = 1.0
-bin_size = 100
 record_downsample_factor = 2
 
 $output_path = /home/tdesbordes/Documents/netsim/tests/rheobase_test/rheobase_results/
@@ -50,5 +49,3 @@ ge_mean = 0 #1.14244e-08
 ge_sigma = 0 #4.30869e-09
 gi_mean = 0 # 7.95233e-08
 gi_sigma = 0 #5.80938e-08
-
-report_minutes = .5

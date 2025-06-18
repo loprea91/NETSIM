@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  * USA.
  *
-******************************************************************************/
+ ******************************************************************************/
 
 #ifndef RNG_H
 #define RNG_H
@@ -30,8 +30,7 @@
 
 #define rng_state isaac64_state
 
-#define rng_uses(x)                                                            \
-  ((RANDMAX *((x)->rngblocks - 1)) + (long long)(RANDMAX - (x)->randcnt))
+#define rng_uses(x) ((RANDMAX * ((x)->rngblocks - 1)) + (long long)(RANDMAX - (x)->randcnt))
 #define rng_init(x, y) isaac64_init((x), (y))
 #define rng_dbl(x) isaac64_dbl32((x))
 #define rng_dbl32(x) isaac64_dbl32((x))

@@ -1,0 +1,86 @@
+N = 375
+M = 3
+K = 1
+
+%Kmat[1,1] = 15
+%Kmat[1,2] = 11
+%Kmat[1,3] = 18
+%Kmat[2,1] = 15
+%Kmat[2,2] = 11
+%Kmat[2,3] = 16
+%Kmat[3,1] = 12
+%Kmat[3,2] = 13
+%Kmat[3,3] = 17
+
+%sigma_mat[1,1] = 1.5e-3
+%sigma_mat[1,2] = .7e-3
+%sigma_mat[1,3] = 1.1e-3
+%sigma_mat[2,1] = .9e-3
+%sigma_mat[2,2] = 1.0e-3
+%sigma_mat[2,3] = 2e-3
+%sigma_mat[3,1] = .9e-3
+%sigma_mat[3,2] = 1.4e-3
+%sigma_mat[3,3] = 4e-3
+
+%speed_mat[1,1] = .2
+%speed_mat[1,2] = 1.0
+%speed_mat[1,3] = 1.0
+%speed_mat[2,1] = .2
+%speed_mat[2,2] = .2
+%speed_mat[2,3] = 1.0
+%speed_mat[3,1] = 1.0
+%speed_mat[3,2] = .2
+%speed_mat[3,3] = .2
+
+%Lz_mat[1,1] = 0
+%Lz_mat[1,2] = 0
+%Lz_mat[1,3] = 0
+%Lz_mat[2,1] = 0
+%Lz_mat[2,2] = 0
+%Lz_mat[2,3] = 0
+%Lz_mat[3,1] = 0
+%Lz_mat[3,2] = 0
+%Lz_mat[3,3] = 0
+
+initiator = 0
+min_conduction_speed = .2
+max_conduction_speed = .2
+
+T = 1.0
+dt = 1e-4
+
+ge = 1e-9
+gi = 1e-8
+taum = 20e-3
+vr = -70e-3
+vreset = -70e-3
+vth = -50e-3
+taur = 5e-3
+Ee = 0
+Ei = -80e-3
+taue = 5e-3
+taui = 5e-3
+El = -65e-3
+Ie = 0
+Cm = 200e-12
+sigma_space = .2e-3
+L = 4e-3
+connector = 5
+output_file_code = 001
+
+synapse_delay = 3e-4
+start_record_time = 0.0
+stop_record_time = 1.0
+bin_size = 10
+record_downsample_factor = 2
+
+save_connectivity_multilayer = 1
+
+$output_path = /Users/gabriel/dump
+
+vm_mean = -0.0680901
+vm_sigma = 0.0057296
+ge_mean = 1.14244e-08
+ge_sigma = 4.30869e-09
+gi_mean = 7.95233e-08
+gi_sigma = 5.80938e-08

@@ -5,4 +5,4 @@
 else {  spike_not_transmitted++;  }
 /* end RELEASE */
 #endif
-              	
+

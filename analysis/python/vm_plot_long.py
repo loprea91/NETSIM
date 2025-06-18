@@ -1,0 +1,50 @@
+import argparse
+from pathlib import Path
+import array as arr
+import matplotlib.pyplot as plt
+import numpy as np
+
+parser = argparse.ArgumentParser(description='Generate plot of membrane voltage from NETSIM')
+parser.add_argument('--data', help='folder with binary output files from NETSIM')
+parser.add_argument('--id', help='id of neuron to plot')
+parser.add_argument('--chunk', help='file chunk number', required=True)
+args = parser.parse_args()
+
+chunk = "{:0>4}".format(args.chunk)
+
+params_path = list(Path(args.data).glob("*params.txt"))[0]
+params_f = open(params_path, "r")
+for param_line in params_f.readlines():
+    param_line = param_line.strip()
+    if (param_line == "" or
+        param_line[0] == "#"):
+        continue
+    param = param_line.split("=")[0].strip()
+    value = param_line.split("=")[1].strip()
+    if param == "N":
+        N = int(value)
+    elif param == "dt":
+        dt = float(value)
+    elif param == "T":
+        T = float(value)
+    elif param == "record_downsample_factor":
+        downsample = int(value)
+        
+id = int(args.id)
+
+vm_path = list(Path(args.data).glob("*vm_" + chunk + ".bin"))[0]
+vm_f = open(vm_path, "rb")
+vm = arr.array("f", vm_f.read())
+vm_f.close()
+
+time = int(len(vm)/N)
+times = np.linspace(0, time * (dt * downsample), time)
+
+plt.figure(figsize=(6.4, 4.8), dpi=300)
+plt.plot(times, vm[id*time:(id+1)*time])
+plt.title("NETSIM Membrane Potential Plot")
+plt.xlabel("Time(s)")
+plt.ylabel("Voltage(V)")
+plt.tight_layout()
+plt.savefig("./vm_plot.png")
+plt.show()

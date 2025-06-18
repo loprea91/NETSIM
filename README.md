@@ -72,3 +72,36 @@ The process for running an arbitrary NETSIM simulation is the same as that descr
 ```
 ./netsim -f <path-to-parameter-file> -o <output-path>
 ```
+
+## pyNetsim interface
+
+A python netsim interface is availible for easy experimental interface. This package is installablle allowing for portability of the netsim ecosystem. To install the package, enter the root repo directory, and run:
+```
+pip install .
+```
+Alternatively, one can pull the git repo and install using
+```
+pip install git+https://github.com/mullerlab/NETSIM-dev.git
+```
+following installation, the netsim is accessible in a OOP manner as follows:
+```
+import pyNetsim.netsim as netsim
+
+net = netsim.netsim(params='<path-to-parameter-file>') #the netsim object
+
+#parameters can be manipulated with keyword args
+net.set_params(ge=1e-9, gi=1e-9)
+
+#the object can be run
+net.run()
+
+#results
+res = net.get_results(reshape=True)
+
+#paramters can easily be modified and run again;
+net.set_params(ge=1e-8)
+net.run()
+
+
+```
+
