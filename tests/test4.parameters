@@ -1,16 +1,9 @@
-#############################
-#							#
-#	NETSIM UNIT TEST 4 		#
-# 							#
-# 	LYLE MULLER 			#
-# 	 						#
-# 	12 APRIL 2018 			#
-# 	GAUSSIAN CONNECT 		#
-# 	 						#
-# 	EXPECTED OUTPUT: 		#
-# 	Total Spikes: 336954 	#
-#							#
-#############################
+# test:	GAUSSIAN CONNECT	     
+# author: LYLE MULLER
+# date: 12 APRIL 2018
+# total spikes: 336954
+
+# parameters
 
 N = 100000
 K = 1000
@@ -43,10 +36,7 @@ output_file_code = 002
 synapse_delay = 3e-4
 start_record_time = 0
 stop_record_time = 1.0
-bin_size = 100
 record_downsample_factor = 2
-
-$output_path = /media/lyle/test4
 
 vm_mean = -0.0680901
 vm_sigma = 0.0057296
@@ -54,5 +44,3 @@ ge_mean = 1.14244e-08
 ge_sigma = 4.30869e-09
 gi_mean = 7.95233e-08
 gi_sigma = 5.80938e-08
-
-report_minutes = .5

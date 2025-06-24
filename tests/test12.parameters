@@ -1,0 +1,67 @@
+# test:	CLUSTERED CONNECTIVITY     
+# author: ERWAN MARTIN
+# date: 10 APRIL 2024
+# total spikes: 93189
+
+# parameters
+
+N = 50000.0
+K = 372.3017084108504
+Nepop = 320
+Kin = 20.360234085396353
+Kout = 280
+initiator = 0
+min_conduction_speed = .02
+max_conduction_speed = .02
+
+T = 3.0
+dt = 1e-4
+
+ge = 7.887905283970187e-10
+gi = 3.063762322937812e-08
+gn = 3.5794173930214965e-10
+taum = 0.02
+vr = -0.07
+vreset = -0.07
+vth = -0.05
+taur = 0.005
+Ee = 0.0
+Ei = -0.08
+En = 0.0
+taue = 0.005
+taui = 0.005
+taun = 0.03706051542373753
+El = -65e-3
+Ie = 0
+Cm = 200e-12
+sigma_space = .2e-3
+L = 1e-3
+connector = 7
+output_file_code = 002
+
+synapse_delay = 3e-4
+start_record_time = 0.0
+stop_record_time = 3.0
+record_downsample_factor = 10
+
+$sparse_current_injection_path = ./stim_100pA
+
+#current_injection_count = 10000
+#$current_injection_path = ./stim_2
+
+poisson_rate = 0.35
+poisson_start_time = 0.01
+poisson_stop_time = 3
+poisson_K_E = 1000
+poisson_K_I = 0
+
+$output_path = /media/lyle/test1
+save_connectivity = 0
+vm_mean = -0.070
+vm_sigma = 0.0
+ge_mean = 0
+ge_sigma = 0
+gi_mean = 0
+gi_sigma = 0
+gn_mean = 0
+gn_sigma = 0

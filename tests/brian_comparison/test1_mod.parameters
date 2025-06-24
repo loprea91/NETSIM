@@ -44,7 +44,6 @@ output_file_code = 002
 synapse_delay = 3e-4
 start_record_time = 0
 stop_record_time = 1.0
-bin_size = 100
 record_downsample_factor = 2
 
 $output_path = /media/lyle/test1
@@ -55,7 +54,5 @@ ge_mean = 1.14244e-08
 ge_sigma = 4.30869e-09
 gi_mean = 7.95233e-08
 gi_sigma = 5.80938e-08
-
-report_minutes = .5
 
 save_connectivity = 1

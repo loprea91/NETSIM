@@ -1,17 +1,9 @@
-#############################
-#							#
-#	NETSIM UNIT TEST 7 		#
-# 							#
-# 	LYLE MULLER 			#
-# 	GABRIEL BENIGNO			#
-# 	 						#
-# 	17 FEBRUARY 2020		#
-# 	GAUSSIAN CONNECT 2D		#
-# 	 						#
-# 	EXPECTED OUTPUT: 		#
-# 	Total Spikes: 583580	#
-#							#
-#############################
+# test: GAUSSIAN CONNECT 2D  			     
+# author: LYLE MULLER, GABRIEL BENIGNO	     	 		     
+# date: 17 FEBRUARY 2020
+# total spikes: 571025
+
+# parameters
 
 N = 112500
 K = 1000
@@ -44,11 +36,9 @@ output_file_code = 001
 synapse_delay = 3e-4
 start_record_time = 0.0
 stop_record_time = 1.0
-bin_size = 10
 record_downsample_factor = 2
 
-save_connectivity = 0
-$output_path = /media/lyle/test7
+save_connectivity = 1
 
 vm_mean = -0.0680901
 vm_sigma = 0.0057296
@@ -56,5 +46,3 @@ ge_mean = 1.14244e-08
 ge_sigma = 4.30869e-09
 gi_mean = 7.95233e-08
 gi_sigma = 5.80938e-08
-
-report_minutes = .5

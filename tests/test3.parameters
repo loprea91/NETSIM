@@ -1,17 +1,9 @@
-#############################
-#							#
-#	NETSIM UNIT TEST 3 		#
-# 							#
-# 	LYLE MULLER 			#
-# 	THEO DESBORDES 			#
-# 	 						#
-# 	12 APRIL 2018 			#
-# 	TEST CONNECT 			#
-# 	 						#
-# 	EXPECTED OUTPUT: 		#
-# 	Total Spikes: 337350 	#
-#							#
-#############################
+# test:	TEST CONNECT	     
+# author: LYLE MULLER, THEO DESBORDES
+# date: 12 APRIL 2018
+# total spikes: 337350
+
+# parameters
 
 N = 100000
 K = 1000
@@ -44,10 +36,8 @@ output_file_code = 002
 synapse_delay = 3e-4
 start_record_time = 0
 stop_record_time = 1.0
-bin_size = 100
 record_downsample_factor = 2
 
-$output_path = /media/lyle/test3
 $optional_connection_path = /media/lyle/netsim-test-connect/test_matrix.dat
 
 vm_mean = -0.0680901
@@ -56,5 +46,3 @@ ge_mean = 1.14244e-08
 ge_sigma = 4.30869e-09
 gi_mean = 7.95233e-08
 gi_sigma = 5.80938e-08
-
-report_minutes = .5

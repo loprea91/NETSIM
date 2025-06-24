@@ -9,8 +9,13 @@
 #
 #	COMMAND LINE OPTIONS:
 #
+#	MULTILAYER=yes			for networks with multiple layers
 # 	EXTERNAL_INPUT=yes		compile in support for external Poisson noise
+#       VARIABLE_EXTERNAL_INPUT=yes	for per neuron and time external Poisson noise
 # 	RELEASE_PROBABILITY=yes		for probabilistic release
+#	CURRENT_INJECTION=yes		external file for current injection term I_e
+#       SPARSE_CURRENT_INJECTION=yes	external sparse file for current injection term I_e
+#   SINGLE_NEURON_PERTURBATION=yes  DS3
 #
 # ================================================================================
 # ================================================================================
@@ -18,45 +23,109 @@
 
 
 SRCDIR = src
-BUILDDIR = .
+BUILDDIR = ./obj
 
 #
 # compiler settings
 #
 
-CC = gcc
+CC = clang
 
 #
 # complation type
 #
 
-FLAGS = -std=gnu11
+CFLAGS = -std=c11 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500
+LDFLAGS = 
 
 # debug
 ifeq ($(COMPILE_TYPE),debug)
-	FLAGS += -ggdb -Wall
+    $(info Using debug flags)
+    CFLAGS += -g -ggdb -gdwarf-4 -Wall -pedantic
 endif
 
 # profiler
-ifeq ($(COMPILE_TYPE),profiler) 
-	FLAGS += -g
+ifeq ($(COMPILE_TYPE),profiler)
+    $(info Using profiler flags)
+    CFLAGS += -O3 -Wall -march=native -flto -g -ggdb -gdwarf-4
+endif
+
+# 
+ifeq ($(COMPILE_TYPE),profilegen)
+    $(info Using profile generate flags)
+    CFLAGS += -O3 -march=native -flto -fprofile-generate -fprofile-arcs -ftest-coverage
+    LDFLAGS += -fprofile-arcs
+endif
+
+ifeq ($(COMPILE_TYPE),profileuse)
+    $(info Using profile use flags)
+    CFLAGS += -O3 -march=native -flto -fprofile-use
 endif
 
 # performance
 ifeq ($(COMPILE_TYPE),performance)
-	FLAGS += -O3 -Wall -march=native -flto
+    $(info Using performance flags)
+    CFLAGS += -O3 -flto
+    ifeq ($(shell uname), Darwin)
+        ifeq ($(shell uname -m), arm64)
+            CFLAGS += -mcpu=apple-m1
+        else
+            CFLAGS += -march=native
+        endif
+    else
+        CFLAGS += -march=native
+    endif
 endif
+
+
 
 #
 # differential compile options
 #
 
-ifeq ($(EXTERNAL_INPUT),yes) 
-	FLAGS += -DEXTERNAL_INPUT
+ifeq ($(EXTERNAL_INPUT),yes)
+    $(info Using external input)
+    CFLAGS += -DEXTERNAL_INPUT
 endif
 
-ifeq ($(RELEASE_PROBABILITY),yes) 
-	FLAGS += -DRELEASE_PROBABILITY
+ifeq ($(VARIABLE_EXTERNAL_INPUT),yes)
+    $(info Using variable external input)
+    CFLAGS += -DVARIABLE_EXTERNAL_INPUT
+endif
+
+ifeq ($(RELEASE_PROBABILITY),yes)
+    $(info Using release probability)
+    CFLAGS += -DRELEASE_PROBABILITY
+endif
+
+ifeq ($(MULTILAYER),yes)
+    $(info Using Multilayer connectivity)
+    CFLAGS += -DMULTILAYER
+endif
+
+ifeq ($(CURRENT_INJECTION),yes)
+    $(info Using current injection)
+    CFLAGS += -DCURRENT_INJECTION
+endif
+
+ifeq ($(SPARSE_CURRENT_INJECTION),yes)
+    $(info Using sparse current injection)
+    CFLAGS += -DSPARSE_CURRENT_INJECTION
+endif
+
+ifeq ($(FAST_BINOMIAL),yes)
+    $(info Using fast binomial)
+    CFLAGS += -DFAST_BINOMIAL
+endif
+
+ifeq ($(LONG_SIMULATION),yes)
+    $(info Write out small binary files)
+    CFLAGS += -DLONG_SIMULATION
+endif
+
+ifeq ($(SINGLE_NEURON_PERTURBATION),yes)
+    $(info Using single neuron perturbation code (set neuron to threshold))
+    CFLAGS += -DSINGLE_NEURON_PERTURBATION
 endif
 
 #
@@ -64,35 +133,41 @@ endif
 #
 
 ifeq ($(shell uname),Linux)
-	LIBS += -lm  
+	LIBS += -lm
 endif
 
 #
 # files
 #
 
-OBJS = $(BUILDDIR)/netsim.o $(BUILDDIR)/rng.o $(BUILDDIR)/isaac64.o $(BUILDDIR)/gamma_dist_rng.o
+SRC = $(wildcard $(SRCDIR)/*.c)
+INC = $(wildcard $(SRCDIR)/*.h)
 
-TARGET = $(BUILDDIR)/netsim
+OBJS = $(patsubst %.c, %.o, $(filter %.c, $(subst $(SRCDIR), $(BUILDDIR), $(SRC))))
+
+TARGET = netsim
 
 #
 # rules
 #
 
-$(TARGET): $(OBJS)
-	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o $(TARGET)
+.PHONY: build
+build: $(BUILDDIR) $(OBJS) $(INC)
+	@$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
+	@echo [LD] Linked $(OBJS) into $(TARGET)
 
-$(BUILDDIR)/netsim.o: $(SRCDIR)/netsim.c $(SRCDIR)/helper_functions/helper_functions.h $(SRCDIR)/helper_functions/helper_gaussian.h $(SRCDIR)/rng.c $(SRCDIR)/rng.h
-	$(CC) $(FLAGS) $(LIBS) -c $(SRCDIR)/netsim.c -o $(BUILDDIR)/netsim.o
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c $(INC)
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo [CC] Compiled $< into $@
 
-$(BUILDDIR)/rng.o: $(SRCDIR)/rng.c $(SRCDIR)/rng.h $(SRCDIR)/isaac64.c $(SRCDIR)/isaac64.h
-	$(CC) $(FLAGS) $(LIBS) -c $(SRCDIR)/rng.c -o $(BUILDDIR)/rng.o
-
-$(BUILDDIR)/isaac64.o: $(SRCDIR)/isaac64.c $(SRCDIR)/isaac64.h
-	$(CC) $(FLAGS) $(LIBS) -c $(SRCDIR)/isaac64.c -o $(BUILDDIR)/isaac64.o
-
-$(BUILDDIR)/gamma_dist_rng.o: $(SRCDIR)/gamma_dist_rng.c $(SRCDIR)/gamma_dist_rng.h $(SRCDIR)/rng.c $(SRCDIR)/rng.h
-	$(CC) $(FLAGS) $(LIBS) -c $(SRCDIR)/gamma_dist_rng.c -o $(BUILDDIR)/gamma_dist_rng.o
-
+.PHONY: clean
 clean:
-	rm -f $(TARGET) $(OBJS)
+	@rm -f $(OBJS) $(TARGET)
+	@rm -d -f $(BUILDDIR)
+	@echo Cleaned $(OBJS), $(BUILDDIR), and $(TARGET)
+
+.PHONY: rebuild
+rebuild: clean build
+
+$(BUILDDIR):
+	mkdir -p $@
